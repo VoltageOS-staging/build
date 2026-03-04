@@ -68,7 +68,11 @@ ifneq ($(filter-out false,$(USE_REWRAPPER)),)
   cxx_platform := $(platform),Pool=$(cxx_pool)
   java_r8_d8_platform := $(platform),Pool=$(java_pool)
 
-  RBE_WRAPPER := $(rbe_dir)/rewrapper
+  ifdef RBE_WRAPPER
+    RBE_WRAPPER := $(RBE_WRAPPER)
+  else
+    RBE_WRAPPER := build/rbe/rewrapper_shim.sh
+  endif
   RBE_CXX := --labels=type=compile,lang=cpp,compiler=clang --env_var_allowlist=PWD --exec_strategy=$(cxx_rbe_exec_strategy) --platform=$(cxx_platform) --compare=$(cxx_compare)
 
   # Append rewrapper to existing *_WRAPPER variables so it's possible to
@@ -90,4 +94,3 @@ ifneq ($(filter-out false,$(USE_REWRAPPER)),)
 
   rbe_dir :=
 endif
-
